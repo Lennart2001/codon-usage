@@ -32,7 +32,11 @@ mode_description = ["AUTO", "GRU", "LSTM", "FNN", "CNN"]
 model_num = len(mode_description)
 print(mode_description)
 print("Current number of Models: " + str(model_num) + "\n")
-epochs = int(input("How many runs for each model? "))
+
+epochs = int(input("How many epochs for each model? "))
+if epochs < 1:
+    epochs = 1
+runs = int(input("How many runs for each model? "))
 updates = str(input("Do you want progress updates? y/n  "))
 want_updates = False
 if updates in ["yes", "y", "Yes", "YES", "Y", "YEs"]:
@@ -63,7 +67,7 @@ for dataset in range(3):
             weighted_f1 = 0.0
             auc_roc = 0.0
 
-            for epoch in range(epochs):  # CHANGE FOR AMOUNT OF TIMES MODEL + OPTIMIZER SHOULD BE RUN
+            for epoch in range(runs):  # CHANGE FOR AMOUNT OF TIMES MODEL + OPTIMIZER SHOULD BE RUN
 
                 models = [tf.keras.Sequential([
                     tf.keras.layers.Dense(512, activation=tf.keras.layers.LeakyReLU()),
@@ -176,7 +180,7 @@ for dataset in range(3):
                 model.compile(optimizer="nadam", loss=tf.keras.losses.SparseCategoricalCrossentropy(),
                               metrics=["accuracy"])
 
-                history = model.fit(train_x, train_y, epochs=1, validation_split=0.2, verbose=0)
+                history = model.fit(train_x, train_y, epochs=epochs, validation_split=0.2, verbose=0)
 
                 loss, acc = model.evaluate(test_x, test_y, verbose=0)
 
@@ -203,14 +207,14 @@ for dataset in range(3):
                     print("Kingdom vs DNA: " + kingdom_dna[kd])
                     print(datasets_names[dataset] + " " + str(dataset + 1) + "/3")
                     print("Model:     " + str(mod + 1) + "/" + str(model_num))
-                    print("Runs:      " + str(epoch + 1) + "/" + str(epochs))
+                    print("Runs:      " + str(epoch + 1) + "/" + str(runs))
 
-            loss_ /= epochs
-            accuracy_ /= epochs
-            macro_f1 /= epochs
-            micro_f1 /= epochs
-            weighted_f1 /= epochs
-            auc_roc /= epochs
+            loss_ /= runs
+            accuracy_ /= runs
+            macro_f1 /= runs
+            micro_f1 /= runs
+            weighted_f1 /= runs
+            auc_roc /= runs
 
             big_string += get_table_row(mode_description[mod], macro_f1, micro_f1, weighted_f1, accuracy_, loss_,
                                         auc_roc) + "\n"
