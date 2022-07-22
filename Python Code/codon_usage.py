@@ -30,6 +30,19 @@ optimizers = ["nAdam"]
 mode_description = ["AUTO", "GRU", "LSTM", "FNN", "CNN"]
 
 model_num = len(mode_description)
+
+
+info_string = ""
+info_string += "\n * * * * * *    INFO    * * * * * *\n\n"
+info_string += "The number of epochs will determine how many training iterations the model will go through per run.\n\n"
+info_string += "The number of runs will determine how many times you actually train the model. The results of each run "
+info_string += "will be averaged at the end and displayed in a pseudo CSV table.\n\n"
+info_string += "The question about updates just means if you want to know where you currently are in the total "
+info_string += "training process. It will tell you how many models are left, how many runs are left and which dataset "
+info_string += "you are in.\n\n\n * * * * * *    INFO    * * * * * *\n"
+
+print(info_string)
+
 print(mode_description)
 print("Current number of Models: " + str(model_num) + "\n")
 
@@ -37,6 +50,8 @@ epochs = int(input("How many epochs for each model? "))
 if epochs < 1:
     epochs = 1
 runs = int(input("How many runs for each model? "))
+if runs < 1:
+    runs = 1
 updates = str(input("Do you want progress updates? y/n  "))
 want_updates = False
 if updates in ["yes", "y", "Yes", "YES", "Y", "YEs"]:
